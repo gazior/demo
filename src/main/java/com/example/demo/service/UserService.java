@@ -1,22 +1,15 @@
 package com.example.demo.service;
 
-import com.example.demo.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.demo.domain.User;
+import org.springframework.stereotype.Service;
 
-public class UserService<T> implements ObjectService<T> {
+@Service
+public interface UserService {
 
+    void save(User user);
 
-    private final UserRepository<T> userRepository;
+    User findById(Long id);
 
-    @Autowired
-    public UserService(UserRepository<T> userRepository) {
-        this.userRepository = userRepository;
-    }
-
-
-    @Override
-    public void save(T user) {
-        userRepository.save(user);
-    }
+    User findByUserName(String username);
 
 }

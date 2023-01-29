@@ -7,6 +7,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
+
 import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
@@ -17,25 +18,26 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .authorizeHttpRequests(authorize -> authorize.requestMatchers("/**").authenticated())
                 .httpBasic(withDefaults())
-                .csrf().disable()
-                .formLogin(f -> f.loginPage("/login").permitAll()
-                                //.defaultSuccessUrl("/index")
-
-                                .successForwardUrl("/index")
-                        //.failureForwardUrl("/login")
+                .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers("/webjars/**").permitAll()
+                        .requestMatchers("/**").authenticated()
+                        .anyRequest().authenticated()
                 )
-                .logout(withDefaults());
+                .httpBasic(withDefaults())
+                .formLogin(f -> f.loginPage("/login").permitAll()
+                               .successForwardUrl("/index")
+                               .defaultSuccessUrl("/index")
+                )
+                .logout(logout -> logout.logoutSuccessUrl("/login"))
+                .oauth2ResourceServer(oauth2 -> oauth2.jwt(jwt -> jwt.jwkSetUri("http://localhost:8080/rest")));
 
         return http.build();
     }
-
 
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
 
 }

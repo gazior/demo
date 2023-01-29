@@ -29,7 +29,7 @@ public class UserImpl implements UserService {
     public void save(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setActive(true);
-        Role userRole = roleRepository.findByName("ROLE_USER");
+        Role userRole = roleRepository.findByName("ROLE_CUSTOMER");
         user.setRoles(new HashSet<>(List.of(userRole)));
         userRepository.save(user);
     }
@@ -40,7 +40,7 @@ public class UserImpl implements UserService {
     }
 
     @Override
-    public User findByUserName(String username) {
-        return userRepository.findByUserName(username);
+    public User findByUsername(String username) {
+        return userRepository.findByUsername(username);
     }
 }

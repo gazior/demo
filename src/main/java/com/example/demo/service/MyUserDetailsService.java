@@ -28,12 +28,12 @@ public class MyUserDetailsService implements UserDetailsService {
     @Override
     @Transactional
     public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
-        User user = userService.findByUserName(userName);
+        User user = userService.findByUsername(userName);
         if(user == null){
             throw new UsernameNotFoundException(userName);
         }
         List<GrantedAuthority> authorities = getUserAuthority(user.getRoles());
-        return new CurrentUser(user.getUserName(),user.getPassword(),
+        return new CurrentUser(user.getUsername(),user.getPassword(),
                 authorities, user);
     }
 
@@ -47,7 +47,7 @@ public class MyUserDetailsService implements UserDetailsService {
     }
 
     private UserDetails buildUserForAuthentication(User user, List<GrantedAuthority> authorities) {
-        return new org.springframework.security.core.userdetails.User(user.getUserName(), user.getPassword(),
+        return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(),
                 user.getActive(), true, true, true, authorities);
     }
 }

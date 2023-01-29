@@ -10,6 +10,6 @@ public interface UserService {
 
     User findById(Long id);
 
-    User findByUserName(String username);
+    User findByUsername(String username);
 
 }
